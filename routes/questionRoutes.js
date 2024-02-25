@@ -11,4 +11,13 @@ router
     .route('/:id/options/create')
     .post(Validate.validateCreateOption, QuestionController.createOptions);
 
+router
+    .route('/:id/delete')
+    .delete(Validate.validateDeleteQuestionOrView, QuestionController.deleteQuestion);
+
+router
+    .route('/:id')
+    .get(Validate.validateDeleteQuestionOrView, QuestionController.viewQuestion);
+    
+
 module.exports = router;
