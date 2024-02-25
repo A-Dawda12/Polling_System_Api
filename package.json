@@ -1,0 +1,43 @@
+{
+  "name": "APP-NAME",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "debug": "ndb server.js",
+    "start": "nodemon server.js"
+  },
+  "author": "RIL",
+  "license": "ISC",
+  "devDependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.4.0",
+    "helmet": "^5.1.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "logger": "^0.0.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.19",
+    "validator": "^13.7.0",
+    "xss-clean": "^0.1.1"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "config": "^3.3.7",
+    "express-validator": "^7.0.1",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0",
+    "moment": "^2.29.4",
+    "mongoose": "^8.2.0",
+    "node-schedule": "^2.1.0",
+    "redis": "^4.2.0",
+    "sequelize": "^6.21.2",
+    "util": "^0.12.4",
+    "winston": "^3.8.1",
+    "winston-daily-rotate-file": "^4.7.1"
+  }
+}
