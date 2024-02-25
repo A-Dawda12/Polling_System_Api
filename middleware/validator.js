@@ -31,7 +31,7 @@ const validateCreateOption = [
   }
 ];
 
-const validateDeleteQuestionOrView = [
+const validateParams = [
   // Validate title field
   param('id').isMongoId(), 
   
@@ -45,4 +45,4 @@ const validateDeleteQuestionOrView = [
   }
 ];
 
-module.exports = {validateCreateQuestion, validateCreateOption, validateDeleteQuestionOrView};
+module.exports = {validateCreateQuestion, validateCreateOption, validateParams};

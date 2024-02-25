@@ -13,11 +13,11 @@ router
 
 router
     .route('/:id/delete')
-    .delete(Validate.validateDeleteQuestionOrView, QuestionController.deleteQuestion);
+    .delete(Validate.validateParams, QuestionController.deleteQuestion);
 
 router
     .route('/:id')
-    .get(Validate.validateDeleteQuestionOrView, QuestionController.viewQuestion);
+    .get(Validate.validateParams, QuestionController.viewQuestion);
     
 
 module.exports = router;

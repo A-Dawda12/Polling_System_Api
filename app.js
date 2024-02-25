@@ -2,7 +2,8 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const questionRoutes = require('./routes/questionRoutes')
+const questionRoutes = require('./routes/questionRoutes');
+const optionRoutes = require('./routes/optionRoutes');
 const {globalErrHandler} = require('./controllers/errorController');
 const ApplicationError = require('./utils/applicationError');
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api', limiter);
 
 // Routes
 app.use('/api/v1/questions', questionRoutes);
+app.use('/api/v1/options', optionRoutes);
 
 
 // handle undefined Routes
