@@ -1,14 +1,12 @@
-const Question = require('../models/question');
-const Option = require('../models/option')
+const questionModel = require('../models/questionModel');
+const log = require('../utils/logger');
 
 module.exports.createQuestion = async (req, res, next) => {
     try {
+      const correlationId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      log.info(`${correlationId} createQuestion req body : ${JSON.stringify(req.body)}`);
       const { title } = req.body;
-    
-      const question = await Question.create({
-        title,
-      });
-  
+      const question = await questionModel.createQuestion(correlationId, title);
       res.status(200).json({
         success: true,
         question,
@@ -21,24 +19,12 @@ module.exports.createQuestion = async (req, res, next) => {
 
 module.exports.createOptions = async (req, res, next) => {
     try {
+      const correlationId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       const questionId = req.params.id;
       const { text } = req.body;
-  
-      const question = await Question.findById(questionId);
-  
-      if (!question) {
-        throw({statusCode : 400, message : "Question not found"})
-      }
-  
-      const option = await Option.create({text,question});
-  
-      // Add link to option
-      const linkForVote = `${process.env.VOTELINK}/${option.id}/add_vote`;
-      option.link_to_vote = linkForVote;
-      option.save();
-  
-      // put reference of option in question schema
-      await question.updateOne({ $push: { options: option } });
+      log.info(`${correlationId} createOptions req params: ${JSON.stringify(req.params)}, req body : ${JSON.stringify(req.body)}`)
+    
+      var option = await questionModel.createOptions(correlationId, questionId, text);
   
       return res.status(200).json({
         success: true,
@@ -53,23 +39,15 @@ module.exports.createOptions = async (req, res, next) => {
 //Delete Question and corresponding options
 module.exports.deleteQuestion = async (req, res, next) => {
   try {
+      const correlationId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      log.info(`${correlationId} deletQuestion params : ${JSON.stringify(req.params)}`)
       const questionId = req.params.id;
-      const question = await Question.findById(questionId);
 
-      // if even one of the options of question has votes. It won't be deleted
-      if (question.totalVotes > 0) {
-        throw({statusCode : 400, message : "Atleast one of options has votes"});
-      }
-
-      // delete all the options of the question
-      await Option.deleteMany({ question: questionId });
-
-      // delete question based on id
-      await Question.findByIdAndDelete(questionId);
+      await questionModel.deleteQuestion(correlationId, questionId)
 
       return res.status(200).json({
         success: true,
-        message: 'Question and associated options deleted successfully!',
+        message: 'Question and associated options deleted successfully!'
       });
   } catch (err) {
       next(err)
@@ -78,23 +56,16 @@ module.exports.deleteQuestion = async (req, res, next) => {
 
 
 //View Question, options and votes 
-module.exports.viewQuestion = async (req, res) => {
+module.exports.viewQuestion = async (req, res, next) => {
   try {
+    const correlationId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    log.info(`${correlationId} viewQuestion params : ${JSON.stringify(req.params)}`);
     const questionId = req.params.id;
-
-    // populate question with all of its options
-    const question = await Question.findById(questionId).populate({
-      path: 'options',
-      model: 'Option',
-    });
-
-    if (!question) {
-      throw({statusCode : 400, message : "Question not found"});
-    }
+    const question = await questionModel.viewQuestion(correlationId, questionId)
 
     return res.status(200).json({
       success: true,
-      question,
+      question
     });
   } catch (err) {
     next(err);

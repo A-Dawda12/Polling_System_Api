@@ -10,7 +10,7 @@ const globalErrHandler = (err, req, res, next) => {
 
     err.status = err.status || 'error';
 
-    log.error(`error : ${err}`);
+    log.error(`error : ${JSON.stringify(err)}`);
 
     res.status(err.statusCode).json({
         "resultStatus": {

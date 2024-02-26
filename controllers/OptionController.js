@@ -1,5 +1,5 @@
-const Option = require('../models/option');
-const Question = require('../models/question');
+const Option = require('../models/optionRepository');
+const Question = require('../models/questionRepository');
 
 // Delete an option based on id
 module.exports.deleteOption = async (req, res, next) => {
