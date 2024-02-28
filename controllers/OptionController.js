@@ -1,28 +1,16 @@
-const Option = require('../models/optionRepository');
-const Question = require('../models/questionRepository');
+// const Option = require('../models/optionRepository');
+// const Question = require('../models/questionRepository');
+const log = require('../utils/logger');
+const optionModel = require('../models/optionModel');
 
 // Delete an option based on id
 module.exports.deleteOption = async (req, res, next) => {
   try {
+    const correlationId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    log.info(`${correlationId} deleteOption params : ${JSON.stringify(req.params)}`)
     const optionId = req.params.id;
-    const option = await Option.findById(optionId);
-
-    if (!option){
-        throw({statusCode : 404, message : "Option not found"});
-    }
-
-    // if option has atleast one vote it won't be deleted
-    if (option.votes > 0) {
-        throw({statusCode : 400, message : "This Option has votes"});
-    }
-
-    const question = await Question.findById(option.question);
-
-    // remove reference of this option from question's options field
-    await question.updateOne({ $pull: { options: optionId } });
-
-    // delete the option
-    await Option.findByIdAndDelete(optionId);
+  
+    await optionModel.deleteOption(correlationId, optionId)
 
     return res.status(200).json({
       success: true,
@@ -36,21 +24,12 @@ module.exports.deleteOption = async (req, res, next) => {
 // To increase the count of votes
 module.exports.addVote = async (req, res, next) => {
   try {
+    const correlationId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    log.info(`${correlationId} addVote params : ${JSON.stringify(req.params)}`);
+
     const optionId = req.params.id;
-    const option = await Option.findById(optionId);
-
-    if (!option) {
-      throw({statusCode : 400, message : "Option not found"});
-    }
-
-    // add one to the value of votes of option
-    option.votes += 1;
-    option.save();
-
-    // add one to the value of total votes of question
-    const question = await Question.findById(option.question);
-    question.totalVotes += 1;
-    question.save();
+    
+    const option = await optionModel.addVote(correlationId, optionId)
 
     return res.status(200).json({
       success: true,

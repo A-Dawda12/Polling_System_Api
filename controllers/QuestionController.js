@@ -7,7 +7,7 @@ module.exports.createQuestion = async (req, res, next) => {
       log.info(`${correlationId} createQuestion req body : ${JSON.stringify(req.body)}`);
       const { title } = req.body;
       const question = await questionModel.createQuestion(correlationId, title);
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         question,
       });
@@ -26,7 +26,7 @@ module.exports.createOptions = async (req, res, next) => {
     
       var option = await questionModel.createOptions(correlationId, questionId, text);
   
-      return res.status(200).json({
+      return res.status(201).json({
         success: true,
         option,
       });
